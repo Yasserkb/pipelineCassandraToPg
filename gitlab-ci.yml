@@ -1,0 +1,21 @@
+stages:
+  - build
+  - run
+
+variables:
+  DOCKER_DRIVER: overlay2
+  EXPORT_PATH: cassandra_exports
+
+build-image:
+  stage: build
+  image: docker:20.10.16
+  services:
+    - docker:dind
+  script:
+    - docker build -t cassandra-etl .
+
+run-etl:
+  stage: run
+  image: cassandra-etl
+  script:
+    - python main.py
